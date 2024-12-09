@@ -7,6 +7,7 @@ import PatientForm from '../components/PatientForm'
 import AppointmentList from '../components/AppointmentList'
 import '../pages/Dashboard.css'
 
+
 const Dashboard = () => {
     return (
         <Router>
@@ -14,37 +15,40 @@ const Dashboard = () => {
                 <div className="row h-100">
                     {/* Menú lateral */}
                     <aside className="col-md-3 bg-dark text-white d-flex flex-column p-3">
-                        <h2 className="text-center mb-4">DentalOriente</h2>
+                        <h2 className="text-center mb-4">
+                           
+                        </h2>
                         <nav>
                             <ul className="nav flex-column">
-                            <li className="nav-item mb-2">
+                                <li className="nav-item mb-2">
                                     <Link className="nav-link text-white" to="/">
-                                        Inicio
-                                    </Link>
-                                </li>
-                            <li className="nav-item mb-2">
-                                    <Link className="nav-link text-white" to="/patient">
-                                        Crear Paciente
+                                    <span className="icon">🏠</span>   Inicio
                                     </Link>
                                 </li>
                                 <li className="nav-item mb-2">
+                                    <Link className="nav-link text-white" to="/patient">
+                                    <span className="icon">➕</span> Crear Paciente
+                                    </Link>
+                                   
+                                </li>
+                                <li className="nav-item mb-2">
                                     <Link className="nav-link text-white" to="/create-appointment">
-                                        Crear Cita
+                                    <span className="icon">📅</span>  Crear Cita
                                     </Link>
                                 </li>
                                 <li className="nav-item mb-2">
                                     <Link className="nav-link text-white" to="/patients">
-                                        Lista de Pacientes
+                                    <span className="icon">🧑‍⚕️</span>  Lista de Pacientes
                                     </Link>
                                 </li>
                                 <li className="nav-item mb-2">
                                     <Link className="nav-link text-white" to="/appointment">
-                                        Historial de Citas
+                                    <span className="icon">📜</span>  Historial de Citas
                                     </Link>
                                 </li>
                                 <li className="nav-item mb-2">
                                     <Link className="nav-link text-white" to="/medics">
-                                        Médicos Disponibles
+                                    <span className="icon">🩺</span>  Médicos Disponibles
                                     </Link>
                                 </li>
                             </ul>
@@ -54,14 +58,19 @@ const Dashboard = () => {
                     {/* Contenido principal */}
                     <main className="col-md-9 bg-light p-4">
                         <Routes>
-                        <Route path="/patient" element={<PatientForm />} />
+                            <Route path="/patient" element={<PatientForm />} />
                             <Route path="/create-appointment" element={<AppointmentForm />} />
                             <Route path="/patients" element={<PatientList />} />
                             <Route path="/medics" element={<MedicList />} />
-                            <Route path="/appointment" element={<AppointmentList/>} />
-                            <Route path="/" element={<div className='title'><h1 className="text-center">Bienvenido a tu Gestión de Citas</h1></div>} />
+                            <Route path="/appointment" element={<AppointmentList />} />
+                            <Route path="/" element={<div className='title'><h1 className="text-center">Bienvenido a tu Gestión de Citas</h1>                        
+                              <img src="/imagen2.jpg" alt="Illustración" className="my-image-class" /></div>} />
+  
                         </Routes>
+                      
                     </main>
+                   
+
                 </div>
             </div>
         </Router>

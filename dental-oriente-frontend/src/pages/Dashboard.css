@@ -1,11 +1,22 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+
 .dashboard-container {
     display: flex;
     height: 100vh;
+    
+    
 }
 
 .sidebar {
     width: 250px;
-    background-color: #4A148C;
+    background-color: #148c7c;
+    
     color: #fff;
     padding: 20px;
     display: flex;
@@ -15,6 +26,8 @@
 
 .sidebar h2 {
     margin-bottom: 20px;
+    
+
 }
 
 .sidebar ul {
@@ -43,4 +56,16 @@
 
 .title {
     background-color: #fff;
+}
+
+
+.nav-link:hover {
+    background-color: #2e84da;
+    color: #ffc107;
+}
+
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
 }
