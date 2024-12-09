@@ -88,7 +88,7 @@ export const systemControllers = {
             const { EspecialidadID, Nombre } = req.body
             const pool = await getConnection()
             const result = await pool.request()
-            .query('SELECT M.MedicoID, M.Nombre, M.Apellido, M.Telefono, E.Nombre AS Especialidad FROM Medicos M INNER JOIN Especialidades E ON M.EspecialidadID = E.EspecialidadID')
+            .query('SELECT M.MedicoID, M.Nombre, M.Apellido, M.Telefono, M.Email, E.Nombre AS Especialidad FROM Medicos M INNER JOIN Especialidades E ON M.EspecialidadID = E.EspecialidadID')
 
             if (result.recordset.length === 0) {
                 return res.status(400).json({ message: 'No hay medicos disponibles' })
@@ -114,10 +114,10 @@ export const systemControllers = {
                 return res.status(500).json({message: 'No hay pacientes disponibles'})
             }
 
-            res.status(500).json(result.recordset)
+            res.status(200).json(result.recordset)
         } catch (error) {
             console.log("Error al obtener pacientes", error)
-            res.status(500).json({message: 'Hubo un error al obtener los pacientes'})
+            res.status(500).json({message: 'Hubo un error al obtener los pacientes', error})
         }
     },
 
@@ -206,6 +206,56 @@ export const systemControllers = {
         }
     },
 
+    async allSchedules(req, res) {
+        try {
+            const { MedicoID, DiaID } = req.query;
+            const pool = await getConnection();
+            const result = await pool.request()
+            .input('MedicoID', sql.Int, MedicoID)
+            .input('DiaID', sql.Int, DiaID)
+            .query(`
+                SELECT H.HorarioID, H.MedicoID, H.DiaID, D.Nombre AS Dia, 
+                       FORMAT(H.HoraInicio, 'hh\\:mm') AS HoraInicio, 
+                       FORMAT(H.HoraFin, 'hh\\:mm') AS HoraFin
+                FROM Horarios H
+                INNER JOIN Dias D ON H.DiaID = D.DiaID
+                WHERE H.MedicoID = @MedicoID AND H.DiaID = @DiaID
+            `);
+            if (result.recordset.length === 0) {
+                return res.status(404).json({ message: 'No hay horarios disponibles para este médico y día' });
+            }
+            res.status(200).json(result.recordset);
+        } catch (error) {
+            console.error('Error al obtener los horarios:', error);
+            res.status(500).json({ message: 'Error al obtener los horarios.' });
+        }
+    },
+    //
+    async getAvailableDays(req, res) {
+        try {
+            const { MedicoID } = req.query;
+    
+            const pool = await getConnection();
+            const result = await pool.request()
+                .input('MedicoID', sql.Int, MedicoID)
+                .query(`
+                    SELECT DISTINCT D.DiaID, D.Nombre 
+                    FROM Horarios H
+                    INNER JOIN Dias D ON H.DiaID = D.DiaID
+                    WHERE H.MedicoID = @MedicoID
+                `);
+    
+            if (result.recordset.length === 0) {
+                return res.status(404).json({ message: 'No hay días disponibles para este médico' });
+            }
+    
+            res.status(200).json(result.recordset); // Devuelve los días disponibles
+        } catch (error) {
+            console.error('Error al obtener los días disponibles:', error);
+            res.status(500).json({ message: 'Hubo un error al obtener los días disponibles' });
+        }
+    },
+
     // MOSTRAR TODAS LAS CITAS
     async viewAppointment(req, res){
         try {
@@ -258,8 +308,46 @@ export const systemControllers = {
             console.error(error);
             res.status(500).json({ error: 'Error al actualizar la cita' });
         }
+    },
+
+    async deleteAppointment(req,res) {
+        try {
+            const {CitaID} = req.params
+            const pool = await getConnection()
+            const result = await pool.request()
+            .input('CitaID', sql.Int, CitaID)
+            .query('DELETE FROM Citas WHERE CitaID = @CitaID')
+
+            if (result.rowsAffected[0] > 0) {
+                res.json({ message: 'Cita eliminada exitosamente.' });
+            } else {
+                res.status(404).json({ message: 'Cita no encontrado.' });
+            }
+
+        } catch (error) {
+            console.log('Error al eliminar cita: ', error)
+            res.status(500).json({message: 'Error al eliminar cita'})
+        }
+    },
+
+    async deletePatient(req,res) {
+        try {
+            const {PacienteID} = req.params
+            const pool = await getConnection()
+            const result = await pool.request()
+            .input('PacienteID', sql.Int, PacienteID)
+            .query('DELETE FROM Pacientes WHERE PacienteID = @PacienteID')
+
+            if (result.rowsAffected[0] > 0) {
+                res.json({ message: 'Paciente eliminado exitosamente.' });
+            } else {
+                res.status(404).json({ message: 'Paciente no encontrado.' });
+            }
+
+        } catch (error) {
+            console.log('Error al eliminar paciente: ', error)
+            res.status(500).json({message: 'Error al eliminar paciente'})
+        }
     }
-
-
 
 }
