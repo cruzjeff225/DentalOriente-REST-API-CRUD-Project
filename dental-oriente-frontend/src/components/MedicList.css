@@ -1,0 +1,51 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+    color: #f8efef;
+    overflow-x: hidden;
+}
+
+/* Ver Citas Page Styles */
+.show-medic-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: inset 0 0 15px rgba(194, 179, 179, 0.1);
+    width: 100%;
+    height: 100%;
+}
+
+.show-medic-table {
+    width: 100%;
+    max-width: 900px;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+}
+
+.show-medic-table th, .show-medic-table td {
+    padding: 12px 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.show-medic-table th {
+    background-color:  #7f5fc5;
+    color: white;
+}
+
+.show-medic-table td {
+    color: #333;
+}
+
